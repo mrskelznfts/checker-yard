@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLOYARD | Wallet Eligibility Checker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <div class="logo-container">
+                <div class="logo-box">
+                    <div class="diamond"></div>
+                    <div class="logo-text">SLOYARD</div>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="hero-section">
+                <div class="hero-content">
+                    <h1>CHECK YOURS SLYRD</h1>
+                    <p class="subtitle">On the digital asphalt, only the fast survive.<br>Check if your wallet is worthy of entry.</p>
+                    
+                    <div class="checker-card">
+                        <label for="wallet-address">EVM ADDRESS</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="wallet-address" placeholder="Enter your wallet address...">
+                        </div>
+                        <button id="check-btn">Check Eligibility</button>
+                        
+                        <div id="scanning-status" class="hidden">
+                            <div class="pulse-container">
+                                <div class="pulse-line"></div>
+                                <div class="pulse-line"></div>
+                                <div class="pulse-line"></div>
+                                <div class="pulse-line"></div>
+                                <div class="pulse-line"></div>
+                            </div>
+                            <span class="scanning-text">SCANNING...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="visual-section">
+                    <div id="protocol-overlay" class="hidden">
+                        <div class="protocol-content">
+                            <h3>INITIALIZING PROTOCOL...</h3>
+                            <div class="progress-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                            <ul class="protocol-steps">
+                                <li id="step-1">Checking transaction history...</li>
+                                <li id="step-2">Verifying whitelist signals...</li>
+                                <li id="step-3">Scanning NFT interactions...</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Result Cards -->
+                    <div id="result-eligible" class="result-card hidden">
+                        <div class="result-header eligible">
+                            <span class="icon">✅</span>
+                            <span class="status-label">ELIGIBLE</span>
+                            <div class="stars">★★★★</div>
+                        </div>
+                        <div class="result-body">
+                            <h2>ACCESS GRANTED.</h2>
+                            <p>You are selected for Guaranteed MINT</p>
+                            <ul class="details">
+                                <li id="wallet-display">0x1a...f9e4</li>
+                                <li>Mint allocation: 2 SLOYARD NFT</li>
+                            </ul>
+                            <div class="actions">
+                                <button class="btn-primary" disabled>MINT NOW</button>
+                                <button class="btn-secondary" disabled>VIEW ON OPENSEA</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="result-not-eligible" class="result-card hidden">
+                        <div class="result-header not-eligible">
+                            <span class="icon">❌</span>
+                            <span class="status-label">NOT ELIGIBLE</span>
+                        </div>
+                        <div class="result-body">
+                            <h2>ACCESS DENIED.</h2>
+                            <p>Sorry, you are not eligible to participate at this time.</p>
+                            <ul class="details">
+                                <li>This wallet was not included in the snapshot. Make sure you’re connected with the right address or check our Discord for more info</li>
+                            </ul>
+                            <div class="actions">
+                                <a href="https://discord.gg/6HydUBssFK" target="_blank"><button class="btn-secondary">Join Waitlist</button></a>
+                                <a href="https://x.com/SloyardNFT" target="_blank"><button class="btn-secondary">Follow Twitter</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="supply-info">
+                <span class="supply-count">2222 SLOYARD Supply</span>
+                <div class="mini-progress">
+                    <div class="mini-fill"></div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script type="module" src="./main.js"></script>
+</body>
+</html>
