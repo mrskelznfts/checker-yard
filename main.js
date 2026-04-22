@@ -54,24 +54,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 .from('wallets')
                 .select('*')
                 .eq('address', address.toLowerCase())
-                .single();
+                .maybeSingle(); // Use maybeSingle to avoid error if not found
 
-            if (data) {
-                // Address found
+            if (data && !error) {
+                // Address found in database
                 walletDisplay.textContent = formatAddress(address);
                 
                 // Update UI based on type (GTD or FCFS)
                 const tierElement = document.getElementById('eligibility-tier');
                 const allocationElement = document.getElementById('mint-allocation');
+                const accessText = document.querySelector('#result-eligible p');
                 
                 if (data.type === 'GTD') {
                     tierElement.textContent = 'Guaranteed MINT (GTD)';
-                    tierElement.style.color = '#ffd700'; // Gold for GTD
+                    tierElement.style.color = '#ffd700';
+                    accessText.textContent = 'You are selected for Guaranteed MINT';
                 } else if (data.type === 'FCFS') {
                     tierElement.textContent = 'First Come First Serve (FCFS)';
-                    tierElement.style.color = '#00e5ff'; // Cyan for FCFS
+                    tierElement.style.color = '#00e5ff';
+                    accessText.textContent = 'You are selected for FCFS MINT';
                 } else {
                     tierElement.textContent = 'Eligible';
+                    accessText.textContent = 'You are selected for SLOYARD';
                 }
 
                 allocationElement.textContent = `Mint allocation: ${data.allocation || 1} SLOYARD NFT`;
@@ -79,13 +83,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 resultEligible.classList.remove('hidden');
                 resultEligible.classList.add('eligible-glow');
             } else {
-                // Not found in database
+                // Not found in database or error occurred
                 resultNotEligible.classList.remove('hidden');
                 resultNotEligible.classList.add('not-eligible-glow');
             }
         } catch (err) {
             console.error('Error fetching eligibility:', err);
-            alert('An error occurred while checking eligibility. Please try again.');
+            // Fallback to not eligible on unexpected errors
+            resultNotEligible.classList.remove('hidden');
+            resultNotEligible.classList.add('not-eligible-glow');
         }
 
         checkBtn.disabled = false;
