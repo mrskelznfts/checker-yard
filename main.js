@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultEligible = document.getElementById('result-eligible');
     const resultNotEligible = document.getElementById('result-not-eligible');
     const walletDisplay = document.getElementById('wallet-display');
+    const errorMessage = document.getElementById('error-message');
+    const inputWrapper = document.querySelector('.input-wrapper');
     
     const steps = [
         document.getElementById('step-1'),
@@ -18,8 +20,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     checkBtn.addEventListener('click', async () => {
         const address = walletInput.value.trim();
+        
+        // Custom Validation
+        errorMessage.classList.add('hidden');
+        inputWrapper.classList.remove('input-error');
+
         if (!address) {
-            alert('Please enter a wallet address');
+            showError('Please enter your EVM address');
+            return;
+        }
+
+        if (!isValidEVMAddress(address)) {
+            showError('Please enter a valid EVM address (0x...)');
             return;
         }
 
@@ -117,6 +129,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         await sleep(500);
+    }
+
+    function isValidEVMAddress(addr) {
+        return /^0x[a-fA-F0-9]{40}$/.test(addr);
+    }
+
+    function showError(msg) {
+        errorMessage.textContent = msg;
+        errorMessage.classList.remove('hidden');
+        inputWrapper.classList.add('input-error');
+        
+        // Remove error after 3 seconds
+        setTimeout(() => {
+            errorMessage.classList.add('hidden');
+            inputWrapper.classList.remove('input-error');
+        }, 3000);
     }
 
     function sleep(ms) {
