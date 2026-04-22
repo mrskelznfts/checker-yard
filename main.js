@@ -1,3 +1,5 @@
+import { supabase } from './supabase.js'
+
 document.addEventListener('DOMContentLoaded', () => {
     const checkBtn = document.getElementById('check-btn');
     const walletInput = document.getElementById('wallet-address');
@@ -46,16 +48,44 @@ document.addEventListener('DOMContentLoaded', () => {
         // Final result simulation
         protocolOverlay.classList.add('hidden');
         
-        // 70% chance eligible for demo purposes, or based on address length
-        const isEligible = address.length > 10 && Math.random() > 0.3;
-        
-        if (isEligible) {
-            walletDisplay.textContent = formatAddress(address);
-            resultEligible.classList.remove('hidden');
-            resultEligible.classList.add('eligible-glow');
-        } else {
-            resultNotEligible.classList.remove('hidden');
-            resultNotEligible.classList.add('not-eligible-glow');
+        try {
+            // Query Supabase for the wallet address
+            const { data, error } = await supabase
+                .from('wallets')
+                .select('*')
+                .eq('address', address.toLowerCase())
+                .single();
+
+            if (data) {
+                // Address found
+                walletDisplay.textContent = formatAddress(address);
+                
+                // Update UI based on type (GTD or FCFS)
+                const tierElement = document.getElementById('eligibility-tier');
+                const allocationElement = document.getElementById('mint-allocation');
+                
+                if (data.type === 'GTD') {
+                    tierElement.textContent = 'Guaranteed MINT (GTD)';
+                    tierElement.style.color = '#ffd700'; // Gold for GTD
+                } else if (data.type === 'FCFS') {
+                    tierElement.textContent = 'First Come First Serve (FCFS)';
+                    tierElement.style.color = '#00e5ff'; // Cyan for FCFS
+                } else {
+                    tierElement.textContent = 'Eligible';
+                }
+
+                allocationElement.textContent = `Mint allocation: ${data.allocation || 1} SLOYARD NFT`;
+                
+                resultEligible.classList.remove('hidden');
+                resultEligible.classList.add('eligible-glow');
+            } else {
+                // Not found in database
+                resultNotEligible.classList.remove('hidden');
+                resultNotEligible.classList.add('not-eligible-glow');
+            }
+        } catch (err) {
+            console.error('Error fetching eligibility:', err);
+            alert('An error occurred while checking eligibility. Please try again.');
         }
 
         checkBtn.disabled = false;
